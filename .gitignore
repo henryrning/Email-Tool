@@ -3,3 +3,4 @@
 __pycache__/
 backups/
 config/*
+!config/outlook_config.json

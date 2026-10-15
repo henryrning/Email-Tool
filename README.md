@@ -28,6 +28,10 @@ python3 -m pip install -r requirements.txt
 4. The first run opens a browser to sign in. After that, the token is saved in `config/gmail_token.json`.
 
 ### Outlook / Microsoft 365
+**University of Illinois (@illinois.edu) accounts:** no setup needed. `config/outlook_config.json` in this
+repository already points to a registered app. Skip to step 5 and sign in with your own account.
+
+Other accounts need their own app registration:
 1. Go to <https://entra.microsoft.com/> → **App registrations → New registration**.
    - Personal Outlook.com account: choose "personal Microsoft accounts" (or "any org + personal").
    - Work/university account: choose that organization. **The organization's IT may need to approve
