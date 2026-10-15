@@ -135,6 +135,30 @@ the cutoff stays where it is.
   `backups/` if you don't want to keep the copies.
 - To revoke the app's access to your mailbox, go to <https://myapps.microsoft.com>.
 
+### Example: the first two months of a mailbox
+
+The oldest email in this mailbox is from 2013-07-23 (found with the command in step 2). To back up and
+remove all of July and August 2013, use September 1 as the cutoff. Nothing older exists, so "before
+2013-09-01" means exactly those two months. There is no `--limit`, so every email in that range is
+included.
+
+```bash
+# back up and check (read-only)
+.venv/bin/python mailclean.py backup --provider outlook --before 2013-09-01
+.venv/bin/python mailclean.py verify --provider outlook --before 2013-09-01
+
+# move to Deleted Items
+.venv/bin/python mailclean.py delete --provider outlook --before 2013-09-01            # dry run: shows the count
+.venv/bin/python mailclean.py delete --provider outlook --before 2013-09-01 --confirm  # type: TRASH <count>
+```
+
+- `backup` prints `Found N`: that is how many emails July and August 2013 contain. The dry run should
+  show the same number.
+- Run `delete` only after `verify` says **"Backup is complete"**. If it says "Still on server without a
+  backup", run `backup` again.
+- Look through `manifest.jsonl` in the backup folder before deleting.
+- The cutoff is midnight local time, so an email from late on August 31 is included.
+
 ## Test
 
 ```bash
