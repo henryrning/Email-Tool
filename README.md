@@ -83,9 +83,25 @@ python3 -m venv .venv
 
 On Windows, use `.venv\Scripts\python` wherever these steps say `.venv/bin/python`.
 
-**2. Pick a cutoff date.** In Outlook on the web, sort the mailbox by date, oldest first, and note the
-year of the oldest email. Use January 1 of the following year as the cutoff. The oldest emails are
-usually notices nobody needs any more. The commands below use `2024-01-01`. Replace it with your date.
+**2. Pick a cutoff date.** Find the date of the oldest email in the whole mailbox (all folders,
+read-only; signs you in on first use):
+
+```bash
+.venv/bin/python -c "
+from pathlib import Path
+from providers.outlook import OutlookProvider, GRAPH
+o = OutlookProvider(Path('config'))
+m = o._call('GET', f'{GRAPH}/me/messages', params={'\$orderby': 'receivedDateTime asc', '\$top': '1', '\$select': 'receivedDateTime,subject,from'}).json()['value'][0]
+print(o.account(), '| oldest:', m['receivedDateTime'][:10], '|', m['subject'])
+"
+```
+
+It prints a line like `you@illinois.edu | oldest: 2019-08-20 | Welcome to Illinois`. Deleted Items and
+Junk count too, so the real oldest email may be a little later. This command is for macOS/Linux. On
+Windows, sort the mailbox in Outlook on the web by date, oldest on top, instead.
+
+Use January 1 of the year after the oldest email as the cutoff. The oldest emails are usually notices
+nobody needs any more. The commands below use `2024-01-01`. Replace it with your date.
 
 **3. Back up 3 emails and verify the copies.** This reads mail only. Nothing is deleted.
 
